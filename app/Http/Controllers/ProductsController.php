@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\UpdateProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 class ProductsController extends Controller
@@ -73,15 +74,16 @@ class ProductsController extends Controller
             );
     }
 
-    public function update(Request $request, Products $product)
+    public function update(UpdateProduct $request, Products $product)
     {
-        $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'desc' => 'sometimes|required|string',
-            'price' => 'sometimes|required|numeric|min:0',
-        ]);
 
-        $product->update($validatedData);
+        $product->update(
+            [
+                'name' => $request->name,
+                'desc' => $request->desc,
+                'price' => $request->price,
+            ]
+        );
 
         return response()->json(
             [
